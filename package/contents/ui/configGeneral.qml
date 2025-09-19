@@ -1,18 +1,17 @@
-import QtQuick 2.2
-import QtQuick.Controls 1.0 as QQC1
-import QtQuick.Controls 2.5 as QQC2
+import QtQuick 2.15
+import QtQuick.Controls 2.15 as QQC2
 import QtQuick.Layouts 1.15
 
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.9 as Kirigami
-import org.kde.plasma.components 3.0 as PlasmaComponents3
-import org.kde.kquickcontrolsaddons 2.1 as KQuickAddons
+import org.kde.plasma.core as PlasmaCore
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.components as PlasmaComponents3
 
 Kirigami.FormLayout {
   id: page
 
-  property alias cfg_icon: plasmoidIcon.icon.name
+  property string cfg_icon
   property alias cfg_zoomFactor: zoomFactor.value
+  property alias cfg_darkMode: darkModeCheckBox.checked
 
   property int commonIconSize: PlasmaCore.Units.iconSizes.smallMedium
 
@@ -29,13 +28,35 @@ Kirigami.FormLayout {
         text: i18n("Zoom Factor:")
       }
 
-      QQC1.SpinBox {
+      QQC2.SpinBox {
         id: zoomFactor
-        decimals: 2
-        stepSize: 0.05
+        from: 50
+        to: 300
+        value: 100
+        stepSize: 5
+        
+        property int decimals: 2
+        
+        textFromValue: function(value, locale) {
+          return Number(value / 100).toLocaleString(locale, 'f', zoomFactor.decimals)
+        }
+        
+        valueFromText: function(text, locale) {
+          return Number.fromLocaleString(locale, text) * 100
+        }
 
         QQC2.ToolTip.visible: hovered
         QQC2.ToolTip.text: i18n("Zoom factor uses to scale the plasmoid")
+      }
+    }
+    
+    RowLayout {
+      QQC2.CheckBox {
+        id: darkModeCheckBox
+        text: i18n("Enable dark mode (experimental)")
+        
+        QQC2.ToolTip.visible: hovered
+        QQC2.ToolTip.text: i18n("Apply dark theme styling to ChatGPT interface")
       }
     }
   }
@@ -50,14 +71,6 @@ Kirigami.FormLayout {
     Kirigami.FormData.isSection: true
   }
 
-  KQuickAddons.IconDialog {
-    id: plasmoidIconDialog
-    iconSize: commonIconSize
-
-    property var icon
-
-    onIconNameChanged: icon.name = iconName
-  }
 
   ColumnLayout {
     RowLayout {
@@ -65,18 +78,21 @@ Kirigami.FormLayout {
         text: i18n("Plasmoid Icon:")
       }
 
-      QQC2.Button {
-        id: plasmoidIcon
-
-        QQC2.ToolTip.visible: hovered
-        QQC2.ToolTip.text: i18n("Select icon for plasmoid")
-
-        icon.width: commonIconSize
-        icon.height: commonIconSize
-
-        onClicked: {
-          plasmoidIconDialog.open()
-          plasmoidIconDialog.icon = plasmoidIcon.icon
+      RowLayout {
+        QQC2.TextField {
+          id: iconNameField
+          placeholderText: i18n("Icon name (e.g., go-jump)")
+          text: cfg_icon
+          onTextChanged: cfg_icon = text
+          
+          QQC2.ToolTip.visible: hovered
+          QQC2.ToolTip.text: i18n("Enter icon name for plasmoid")
+        }
+        
+        Kirigami.Icon {
+          source: cfg_icon
+          width: commonIconSize
+          height: commonIconSize
         }
       }
 
@@ -88,7 +104,10 @@ Kirigami.FormLayout {
         icon.width: commonIconSize
         icon.height: commonIconSize
 
-        onClicked: plasmoidIcon.icon.name = "go-jump"
+        onClicked: {
+          iconNameField.text = "go-jump"
+          cfg_icon = "go-jump"
+        }
       }
     }
   }

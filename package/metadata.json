@@ -2,19 +2,23 @@
   "KPlugin": {
     "Authors": [
       {
-        "Email": "aliheym.dev@gmail.com",
-        "Name": "aliheym"
+        "Email": "paul.sturm@cotton-software.com",
+        "Name": "Paul Sturm"
       }
     ],
     "Category": "Online Services",
-    "Description": "ChatGPT plasmoid for KDE Plasma",
-    "Icon": "go-jump",
-    "Id": "com.aliheym.chatgpt",
-    "Name": "ChatGPT for KDE Plasma",
-    "Version": "0.1",
-    "Website": "https://github.com/aliheym"
+    "Description": "Access ChatGPT directly from your desktop with this KDE Plasma 6 widget. Features zoom control, an experimental dark mode, and full ChatGPT functionality including GPTs and file uploads.",
+    "Icon": "applications-internet",
+    "Id": "com.chevybowtie.chatgpt",
+    "Name": "Desktop Chat Panel for KDE 6",
+  "Version": "2.0.0",
+    "Website": "https://github.com/chevybowtie/plasmoid-chatgpt-kde6",
+    "License": "GPL-3.0",
+    "BugReportUrl": "https://github.com/chevybowtie/plasmoid-chatgpt-kde6/issues"
+
   },
   "X-Plasma-API": "declarativeappletscript",
+  "X-Plasma-API-Minimum-Version": "6.0",
   "X-Plasma-MainScript": "ui/main.qml",
   "KPackageStructure": "Plasma/Applet"
 }

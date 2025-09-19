@@ -23,13 +23,13 @@ jobs:
 
       - name: 📁 Archive the plasmoid
         run: |
-          tar czf com.aliheym.chatgpt-${{ github.ref_name }}.tar.gz --directory=./package .
+          tar czf com.chevybowtie.chatgpt-${{ github.ref_name }}.tar.gz --directory=./package .
 
       - name: 🚀 Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            com.aliheym.chatgpt-${{ github.ref_name }}.tar.gz
+            com.chevybowtie.chatgpt-${{ github.ref_name }}.tar.gz
           name: ${{ github.ref_name }}
           body: ${{ steps.generate-release-changelog.outputs.changelog }}
           token: ${{ secrets.GITHUB_TOKEN }}
